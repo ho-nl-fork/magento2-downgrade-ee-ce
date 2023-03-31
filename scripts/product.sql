@@ -62,6 +62,20 @@ ALTER TABLE `catalog_product_super_attribute`
 ALTER TABLE `catalog_product_super_link`
     ADD COLUMN `new_parent_id` INT(10) UNSIGNED NOT NULL DEFAULT 0 COMMENT 'Parent ID';
 
+-- Remove Database triggers
+DROP TRIGGER trg_catalog_product_entity_after_delete;
+DROP TRIGGER trg_catalog_product_entity_after_update;
+
+DROP TRIGGER trg_catalog_product_entity_datetime_after_update;
+DROP TRIGGER trg_catalog_product_entity_decimal_after_update;
+DROP TRIGGER trg_catalog_product_entity_int_after_update;
+DROP TRIGGER trg_catalog_product_entity_text_after_update;
+DROP TRIGGER trg_catalog_product_entity_tier_price_after_update;
+DROP TRIGGER trg_catalog_product_entity_varchar_after_update;
+DROP TRIGGER trg_catalog_product_bundle_selection_after_update;
+DROP TRIGGER trg_catalog_product_link_after_update;
+DROP TRIGGER trg_catalog_product_super_link_after_update;
+
 -- Clean duplicate for catalog product entity
 
 DELETE e
