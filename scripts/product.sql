@@ -524,3 +524,4 @@ DELETE FROM eav_attribute WHERE attribute_code IN ("related_tgtr_position_limit"
 
 DELETE FROM catalog_product_entity_varchar WHERE attribute_id IN (SELECT attribute_id FROM eav_attribute WHERE attribute_code = 'is_returnable');
 DELETE FROM eav_attribute WHERE attribute_code = 'is_returnable';
+DELETE FROM eav_attribute WHERE attribute_code = 'giftcard_amounts';
