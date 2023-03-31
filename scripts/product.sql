@@ -504,3 +504,9 @@ ALTER TABLE `wishlist_item`
     ADD CONSTRAINT `WISHLIST_ITEM_PRODUCT_ID_CATALOG_PRODUCT_ENTITY_ENTITY_ID` FOREIGN KEY (`product_id`) REFERENCES `catalog_product_entity` (`entity_id`) ON DELETE CASCADE ON UPDATE RESTRICT;
 
 DROP TABLE `sequence_product_bundle_selection`,`sequence_product_bundle_option`,`sequence_product`;
+
+-- Remove Commerce attributes. These attributes are not used.
+DELETE FROM eav_attribute WHERE attribute_code IN ("related_tgtr_position_limit", "related_tgtr_position_behavior", "upsell_tgtr_position_limit", "upsell_tgtr_position_behavior");
+
+DELETE FROM catalog_product_entity_varchar WHERE attribute_id IN (SELECT attribute_id FROM eav_attribute WHERE attribute_code = 'is_returnable');
+DELETE FROM eav_attribute WHERE attribute_code = 'is_returnable';
