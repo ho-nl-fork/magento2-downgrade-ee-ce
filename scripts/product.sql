@@ -62,6 +62,20 @@ ALTER TABLE `catalog_product_super_attribute`
 ALTER TABLE `catalog_product_super_link`
     ADD COLUMN `new_parent_id` INT(10) UNSIGNED NOT NULL DEFAULT 0 COMMENT 'Parent ID';
 
+-- Remove Database triggers
+DROP TRIGGER trg_catalog_product_entity_after_delete;
+DROP TRIGGER trg_catalog_product_entity_after_update;
+
+DROP TRIGGER trg_catalog_product_entity_datetime_after_update;
+DROP TRIGGER trg_catalog_product_entity_decimal_after_update;
+DROP TRIGGER trg_catalog_product_entity_int_after_update;
+DROP TRIGGER trg_catalog_product_entity_text_after_update;
+DROP TRIGGER trg_catalog_product_entity_tier_price_after_update;
+DROP TRIGGER trg_catalog_product_entity_varchar_after_update;
+DROP TRIGGER trg_catalog_product_bundle_selection_after_update;
+DROP TRIGGER trg_catalog_product_link_after_update;
+DROP TRIGGER trg_catalog_product_super_link_after_update;
+
 -- Clean duplicate for catalog product entity
 
 DELETE e
@@ -351,6 +365,7 @@ ALTER TABLE `catalog_product_entity_varchar`
 ALTER TABLE `catalog_product_entity_media_gallery_value_to_entity`
     DROP FOREIGN KEY `CAT_PRD_ENTT_MDA_GLR_VAL_TO_ENTT_ROW_ID_CAT_PRD_ENTT_ROW_ID`,
     DROP INDEX `CAT_PRD_ENTT_MDA_GLR_VAL_TO_ENTT_ROW_ID_CAT_PRD_ENTT_ROW_ID`,
+    DROP INDEX `PRIMARY`,
     ADD CONSTRAINT `CAT_PRD_ENTT_MDA_GLR_VAL_TO_ENTT_VAL_ID_ENTT_ID` UNIQUE KEY (`value_id`,`entity_id`),
 	DROP COLUMN `row_id`;
 
@@ -358,7 +373,6 @@ ALTER TABLE `catalog_product_entity_media_gallery_value_to_entity`
 ALTER TABLE `catalog_product_entity_media_gallery_value`
     DROP FOREIGN KEY `CAT_PRD_ENTT_MDA_GLR_VAL_ROW_ID_CAT_PRD_ENTT_ROW_ID`,
     DROP INDEX `CATALOG_PRODUCT_ENTITY_MEDIA_GALLERY_VALUE_ROW_ID`,
-	DROP INDEX `CAT_PRD_ENTT_MDA_GLR_VAL_ENTT_ID_VAL_ID_STORE_ID`,
     ADD INDEX `CATALOG_PRODUCT_ENTITY_MEDIA_GALLERY_VALUE_ENTITY_ID` (`entity_id`),
     ADD CONSTRAINT `CAT_PRD_ENTT_MDA_GLR_VAL_ENTT_ID_VAL_ID_STORE_ID` UNIQUE KEY (`entity_id`,`value_id`,`store_id`),
 	DROP COLUMN `row_id`;
@@ -504,3 +518,10 @@ ALTER TABLE `wishlist_item`
     ADD CONSTRAINT `WISHLIST_ITEM_PRODUCT_ID_CATALOG_PRODUCT_ENTITY_ENTITY_ID` FOREIGN KEY (`product_id`) REFERENCES `catalog_product_entity` (`entity_id`) ON DELETE CASCADE ON UPDATE RESTRICT;
 
 DROP TABLE `sequence_product_bundle_selection`,`sequence_product_bundle_option`,`sequence_product`;
+
+-- Remove Commerce attributes. These attributes are not used.
+DELETE FROM eav_attribute WHERE attribute_code IN ("related_tgtr_position_limit", "related_tgtr_position_behavior", "upsell_tgtr_position_limit", "upsell_tgtr_position_behavior");
+
+DELETE FROM catalog_product_entity_varchar WHERE attribute_id IN (SELECT attribute_id FROM eav_attribute WHERE attribute_code = 'is_returnable');
+DELETE FROM eav_attribute WHERE attribute_code = 'is_returnable';
+DELETE FROM eav_attribute WHERE attribute_code = 'giftcard_amounts';
